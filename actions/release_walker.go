@@ -1,6 +1,7 @@
 package actions
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -38,13 +39,17 @@ func (r *releaseWalker) walk(path string, release releaseName, fi os.FileInfo, e
 		log.Fatalf("Error reading file %s (%s)", path, err)
 	}
 
-	newContents := strings.Replace(string(read), "-dev", "-"+release.Short, -1)
+	shortVersionReplacement := "-" + release.Short
+	if release.Full == release.Short && strings.Contains(path, "README") {
+		shortVersionReplacement = ""
+	}
+	newContents := strings.Replace(string(read), "-dev", shortVersionReplacement, -1)
 	newContents = strings.Replace(newContents, "v2.0.0", release.Full, -1)
 
 	if _, err := fs.WriteFile(path, []byte(newContents), 0); err != nil {
 		log.Fatalf("Error writing contents to file %s (%s)", path, err)
 	}
 
-	log.Printf("File '%s' updated with release '%s'", path, release.Short)
+	fmt.Printf("File '%s' updated with release '%s'\n", path, release.Short)
 	return nil
 }
