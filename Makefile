@@ -21,6 +21,8 @@ DEIS_BINARY_NAME ?= ./deis
 GO_BUILD_CMD := go build -a -installsuffix cgo -ldflags ${LDFLAGS} -o deisrel .
 GO_TEST_CMD := go test -v $$(glide nv)
 
+CROSS_COMPILE_OPTS := -os="linux darwin " -arch="amd64"
+
 bootstrap:
 	${DEV_ENV_CMD} glide install
 
@@ -37,7 +39,7 @@ test-docker:
 	${DEV_ENV_CMD} sh -c '${GO_TEST_CMD}'
 
 build-cli-cross:
-	${DEV_ENV_CMD} gox -output="bin/${VERSION}/${SHORT_NAME}-${VERSION}-{{.OS}}-{{.Arch}}"
-	${DEV_ENV_CMD} gox -output="bin/${SHORT_NAME}-latest-{{.OS}}-{{.Arch}}"
+	${DEV_ENV_CMD} gox ${CROSS_COMPILE_OPTS} -output="bin/${VERSION}/${SHORT_NAME}-${VERSION}-{{.OS}}-{{.Arch}}"
+	${DEV_ENV_CMD} gox ${CROSS_COMPILE_OPTS} -output="bin/${SHORT_NAME}-latest-{{.OS}}-{{.Arch}}"
 
 dist: build-cli-cross
