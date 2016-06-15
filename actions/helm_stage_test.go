@@ -157,7 +157,7 @@ func TestCreateDirAlreadyExists(t *testing.T) {
 		"file system contents")
 }
 
-func TestUpdateFilesWithRelease(t *testing.T) {
+func TestUpdateFilesWithMinorRelease(t *testing.T) {
 	fakeFS := sys.NewFakeFS()
 	fakeFP := sys.NewFakeFP()
 
@@ -177,6 +177,51 @@ func TestUpdateFilesWithRelease(t *testing.T) {
 		actualFileContents,
 		[]byte(fmt.Sprintf("name: workflow-%s, version: %s", deisRelease.Short, deisRelease.Full)),
 		"updated file")
+}
+
+func TestUpdateFilesWithMajorRelease(t *testing.T) {
+	fakeFS := sys.NewFakeFS()
+	fakeFP := sys.NewFakeFP()
+
+	type testFile struct {
+		name             string
+		originalContents []byte
+		expectedContents []byte
+	}
+
+	var majorRelease = releaseName{
+		Full:  "major",
+		Short: "major",
+	}
+
+	testFiles := []testFile{
+		testFile{
+			name:             "foo/bar",
+			originalContents: []byte("name: workflow-dev, version: v2.0.0"),
+			expectedContents: []byte(fmt.Sprintf("name: workflow-%s, version: %s", majorRelease.Full, majorRelease.Full)),
+		},
+		testFile{
+			name:             "README",
+			originalContents: []byte("Workflow 2.0.0-dev"),
+			expectedContents: []byte("Workflow 2.0.0"),
+		},
+	}
+
+	for _, testFile := range testFiles {
+		fakeFS.Create(testFile.name)
+		fakeFS.WriteFile(testFile.name, testFile.originalContents, os.ModePerm)
+
+		err := updateFilesWithRelease(fakeFP, fakeFS, majorRelease, testFile.name)
+
+		assert.NoErr(t, err)
+		actualFileContents, err := fakeFS.ReadFile(testFile.name)
+		fmt.Println(string(actualFileContents))
+		assert.NoErr(t, err)
+		assert.Equal(t,
+			actualFileContents,
+			testFile.expectedContents,
+			fmt.Sprintf("updated file with release %s", majorRelease))
+	}
 }
 
 func TestUpdateFilesWithReleaseWithoutRelease(t *testing.T) {
