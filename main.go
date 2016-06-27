@@ -68,6 +68,25 @@ func main() {
 						},
 					},
 				},
+				cli.Command{
+					Name: "milestone",
+					Subcommands: []cli.Command{
+						cli.Command{
+							Name:   "mv",
+							Action: actions.MoveMilestone(ghClient),
+							Flags: []cli.Flag{
+								cli.BoolFlag{
+									Name:  actions.YesFlag,
+									Usage: "If true, skip the prompt requesting permission",
+								},
+								cli.BoolFlag{
+									Name:  actions.IncludeClosed,
+									Usage: "If true, moved closed issues as well as open ones",
+								},
+							},
+						},
+					},
+				},
 			},
 		},
 		cli.Command{
@@ -150,5 +169,7 @@ func main() {
 		},
 	}
 
-	app.Run(os.Args)
+	if err := app.Run(os.Args); err != nil {
+		os.Exit(1)
+	}
 }

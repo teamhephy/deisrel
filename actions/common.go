@@ -26,6 +26,8 @@ const (
 	GHOrgFlag = "ghOrg"
 	// StagingDirFlag represents the '-stagingDir' flag
 	StagingDirFlag = "stagingDir"
+	// IncludeClosed represents the '--includeClosed' flag
+	IncludeClosed = "includeClosed"
 )
 
 const (
