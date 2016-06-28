@@ -111,7 +111,7 @@ var (
 		Files: []string{
 			"README.md",
 			"Chart.yaml",
-			filepath.Join("tpl", "workflow-e2e-pod.yaml"),
+			filepath.Join("tpl", "generate_params.toml"),
 		},
 	}
 )
