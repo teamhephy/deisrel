@@ -32,6 +32,15 @@ func helmStage(ghClient *github.Client, c *cli.Context, helmChart helmChart) {
 		log.Fatalf("Error creating dir %s (%s)", filepath.Join(stagingDir, "tpl"), err)
 	}
 
+	// stage 'tpl/generate_params.toml' with latest git shas for each component
+	defaultParamsComponentAttrs := genParamsComponentAttrs{
+		Org:        c.GlobalString(OrgFlag),
+		PullPolicy: c.GlobalString(PullPolicyFlag),
+		Tag:        c.GlobalString(TagFlag),
+	}
+	paramsComponentMap := getParamsComponentMap(ghClient, defaultParamsComponentAttrs, helmChart.Template, c.GlobalString(RefFlag))
+	generateParams(ourFS, stagingDir, paramsComponentMap, helmChart)
+
 	// gather helmChart.Files from GitHub needing release string updates
 	ghFiles, err := downloadFiles(ghClient, org, repo, &opt, helmChart)
 	if err != nil {
@@ -42,15 +51,6 @@ func helmStage(ghClient *github.Client, c *cli.Context, helmChart helmChart) {
 	if err := updateFilesWithRelease(ourFP, ourFS, deisRelease, stagingDir); err != nil {
 		log.Fatalf("Error updating files with release '%s' (%s)", deisRelease.Short, err)
 	}
-
-	// stage 'tpl/generate_params.toml' with latest git shas for each component
-	defaultParamsComponentAttrs := genParamsComponentAttrs{
-		Org:        c.GlobalString(OrgFlag),
-		PullPolicy: c.GlobalString(PullPolicyFlag),
-		Tag:        c.GlobalString(TagFlag),
-	}
-	paramsComponentMap := getParamsComponentMap(ghClient, defaultParamsComponentAttrs, helmChart.Template, c.GlobalString(RefFlag))
-	generateParams(ourFS, stagingDir, paramsComponentMap, helmChart)
 }
 
 func createDir(fs sys.FS, dirName string) error {
