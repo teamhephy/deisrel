@@ -10,12 +10,12 @@ var (
 		"monitor":          {"InfluxDB", "Grafana", "Telegraf"},
 		"logger":           {"Logger"},
 		"minio":            {"Minio"},
+		"nsq":              {"NSQ"},
 		"postgres":         {"Database"},
 		"registry":         {"Registry"},
 		"router":           {"Router"},
 		"slugbuilder":      {"SlugBuilder"},
 		"slugrunner":       {"SlugRunner"},
-		"stdout-metrics":   {"StdoutMetrics"},
 		"workflow-e2e":     {"WorkflowE2E"},
 		"workflow-manager": {"WorkflowManager"},
 	}
