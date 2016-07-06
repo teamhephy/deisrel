@@ -12,8 +12,13 @@ import (
 )
 
 const (
-	newOrgFlag    = "new-org"
-	defaultNewOrg = "deis"
+	newOrgFlag     = "new-org"
+	defaultNewOrg  = "deis"
+	registriesFlag = "registries"
+)
+
+var (
+	defaultDockerRegistriesStringSlice = cli.StringSlice([]string{docker.DockerHubRegistry, "quay.io"})
 )
 
 func getAllReposAndShas(
@@ -96,6 +101,7 @@ func retagCmd(ghClient *github.Client, dockerCl docker.Client) func(c *cli.Conte
 		shaFilepath := c.String(actions.ShaFilepathFlag)
 		ref := c.String(actions.RefFlag)
 		promptPush := !c.Bool(actions.YesFlag)
+		registries := c.StringSlice(registriesFlag)
 
 		allReposAndShas, err := getAllReposAndShas(ghClient, shaFilepath, ref)
 		if err != nil {
@@ -104,7 +110,7 @@ func retagCmd(ghClient *github.Client, dockerCl docker.Client) func(c *cli.Conte
 
 		repoAndShaList := git.NewRepoAndShaListFromSlice(allReposAndShas)
 		repoAndShaList.Sort()
-		images, err := docker.ParseImagesFromRepoAndShaList(docker.DeisCIDockerOrg, repoAndShaList)
+		images, err := docker.ParseImagesFromRepoAndShaList(registries, docker.DeisCIDockerOrg, repoAndShaList)
 		if err != nil {
 			log.Fatalf("Error parsing docker images (%s)", err)
 		}

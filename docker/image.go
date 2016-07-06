@@ -7,6 +7,10 @@ import (
 	"github.com/deis/deisrel/git"
 )
 
+const (
+	DockerHubRegistry = "index.docker.io"
+)
+
 // ErrInvalidImageName is the error returned when a func couldn't parse a string into an
 // Image struct
 type ErrInvalidImageName struct {
@@ -64,25 +68,51 @@ func ParseImageFromName(name string) (*Image, error) {
 	return nil, ErrInvalidImageName{Str: name}
 }
 
-// ParseImageFromRepoAndSha attempts to convert ras into a docker image, using
-// dockerRegistryOrg as the docker registry
-func ParseImageFromRepoAndSha(dockerRegistryOrg string, ras git.RepoAndSha) (*Image, error) {
-	str := fmt.Sprintf("quay.io/%s/%s:git-%s", dockerRegistryOrg, ras.Name, ras.SHA)
-	return ParseImageFromName(str)
+// ParseImageFromRepoAndSha attempts to convert ras into a set of docker images, each of which
+// points to a registry in registries and uses dockerRegistryOrg. Any registry that matches
+// DockerHubRegistry will be converted to empty
+func ParseImageFromRepoAndSha(
+	dockerRegistries []string,
+	dockerRegistryOrg string,
+	ras git.RepoAndSha,
+) ([]*Image, error) {
+	ret := make([]*Image, len(dockerRegistries))
+	for i, reg := range dockerRegistries {
+		str := fmt.Sprintf("%s/%s:git-%s", dockerRegistryOrg, ras.Name, ras.ShortSHA())
+		if reg == DockerHubRegistry {
+			reg = ""
+		}
+		if reg != "" {
+			// prepend the registry if it's non-empty
+			str = fmt.Sprintf("%s/%s", reg, str)
+		}
+		img, err := ParseImageFromName(str)
+		if err != nil {
+			return nil, err
+		}
+		ret[i] = img
+	}
+	return ret, nil
 }
 
 // ParseImagesFromRepoAndShaList returns a slice of parsed Images in the same order as they
 // appear in rasl.Slice(). Returns an empty slice and a non-nil error if any one of the
 // git.RepoAndShas couldn't be parsed
-func ParseImagesFromRepoAndShaList(dockerRegistryOrg string, rasl *git.RepoAndShaList) ([]*Image, error) {
+func ParseImagesFromRepoAndShaList(
+	dockerRegistries []string,
+	dockerRegistryOrg string,
+	rasl *git.RepoAndShaList,
+) ([]*Image, error) {
 	raslSlice := rasl.Slice()
-	ret := make([]*Image, len(raslSlice))
-	for i, ras := range raslSlice {
-		img, err := ParseImageFromRepoAndSha(dockerRegistryOrg, ras)
+	ret := []*Image{}
+	for _, ras := range raslSlice {
+		imgs, err := ParseImageFromRepoAndSha(dockerRegistries, dockerRegistryOrg, ras)
 		if err != nil {
 			return nil, err
 		}
-		ret[i] = img
+		for _, img := range imgs {
+			ret = append(ret, img)
+		}
 	}
 	return ret, nil
 }
