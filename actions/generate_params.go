@@ -130,6 +130,11 @@ dockerTag = "{{.InfluxDB.Tag}}"
 org = "{{.Telegraf.Org}}"
 pullPolicy = "{{.Telegraf.PullPolicy}}"
 dockerTag = "{{.Telegraf.Tag}}"
+
+[nsqd]
+org = "{{.NSQ.Org}}"
+pullPolicy = "{{.NSQ.PullPolicy}}"
+dockerTag = "{{.NSQ.Tag}}"
 `
 )
 
