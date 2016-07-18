@@ -12,6 +12,7 @@ var (
 		"minio":            {"Minio"},
 		"nsq":              {"NSQ"},
 		"postgres":         {"Database"},
+		"redis":            {"Redis"},
 		"registry":         {"Registry"},
 		"router":           {"Router"},
 		"slugbuilder":      {"SlugBuilder"},
