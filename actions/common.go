@@ -51,7 +51,7 @@ var (
 	// additionalGitRepoNames represents the repo names lacking representation
 	// in any helm chart, yet still requiring updates during each Workflow
 	// release, including changelog generation and creation of git tags.
-	additionalGitRepoNames = []string{"workflow", "charts"}
+	additionalGitRepoNames = []string{"workflow", "charts", "workflow-cli"}
 
 	// allGitRepoNames represent all GitHub repo names needing git-based updates for a release
 	allGitRepoNames = append(git.RepoNames(), additionalGitRepoNames...)
