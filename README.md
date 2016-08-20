@@ -59,10 +59,14 @@ Here's an example file:
   "postgres": ["database"],
   "redis": ["loggerRedis"],
   "registry": ["registry"],
+  "registry-proxy": ["registry_proxy"],
+  "registry-token-refresher": ["registry_token_refresher"],
   "router": ["router"],
   "slugbuilder": ["slugbuilder"],
   "slugrunner": ["slugrunner"],
-  "workflow-manager": ["workflowManager"]
+  "workflow-cli": ["workflow-cli"],
+  "workflow-manager": ["workflowManager"],
+  "workflow-e2e": ["workflow-e2e"]
 }
 ```
 
