@@ -59,7 +59,7 @@ func GenerateIndividualChangelog(client *github.Client, dest io.Writer) func(*cl
 		g := "\033[0;32m"
 		b := "\033[0;34m"
 		r := "\033[0m"
-		fmt.Printf("\n%sCreating changelog for %s with tag %s through commit %s\n\n", g, b+repoName+g, b+vals.OldRelease+g, b+sha+r)
+		fmt.Fprintf(os.Stderr, "\n%sCreating changelog for %s with tag %s through commit %s\n\n", g, b+repoName+g, b+vals.OldRelease+g, b+sha+r)
 
 		if err != nil {
 			log.Fatalf("could not generate changelog: %s", err)
