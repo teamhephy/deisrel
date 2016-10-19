@@ -7,6 +7,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"regexp"
 	"strings"
 
 	"github.com/google/go-github/github"
@@ -22,6 +23,9 @@ func ReleaseComponent(client *github.Client, dest io.Writer) func(*cli.Context) 
 		}
 		component := c.Args().Get(0)
 		newTag := c.Args().Get(1)
+		if !isValidSemVerTag(newTag) {
+			return cli.NewExitError("Invalid semantic version tag", 1)
+		}
 		dryRun := c.Bool("dry-run")
 		sha := c.String("sha")
 
@@ -66,6 +70,11 @@ Create release for Deis %s %s?`
 
 		return nil
 	}
+}
+
+func isValidSemVerTag(tag string) bool {
+	regx := regexp.MustCompile(`^v[0-9]+\.[0-9]+\.[0-9]+$`)
+	return regx.MatchString(tag)
 }
 
 func getComponentTitle(component string) string {
