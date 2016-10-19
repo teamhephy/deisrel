@@ -1,16 +1,16 @@
 hash: 07653ad15621f1ffaf7be779a12e5dd715cf6d70d9254e8b249c088218be49fc
-updated: 2016-07-28T18:46:26.04683027Z
+updated: 2016-10-19T15:27:03.2871556-06:00
 imports:
 - name: github.com/arschles/assert
-  version: fc2da9844984ce5093111298174706e14d4c0c47
+  version: bb58b908265b5931732079df03f2818bf2167ba0
 - name: github.com/BurntSushi/toml
   version: 99064174e013895bbd9b025c31100bd1d9b590ca
 - name: github.com/golang/protobuf
-  version: 874264fbbb43f4d91e999fecb4b40143ed611400
+  version: df1d3ca07d2d07bba352d5b73c4313b4e2a6203e
   subpackages:
   - proto
 - name: github.com/google/go-github
-  version: b5e5babef39c18002f177a134fc49dc5013374ba
+  version: ed33550bbf49ddffcc36e1309d3f58ed0b6c2305
   subpackages:
   - github
 - name: github.com/google/go-querystring
@@ -18,23 +18,23 @@ imports:
   subpackages:
   - query
 - name: github.com/urfave/cli
-  version: d9021faab69f92295ef7061bd39e4a76dcbdef32
+  version: 55f715e28c46073d0e217e2ce8eb46b0b45e3db6
 - name: golang.org/x/net
-  version: 4d38db76854b199960801a1734443fd02870d7e1
+  version: fb93926129b8ec0056f2f458b1f519654814edf0
   subpackages:
   - context
 - name: golang.org/x/oauth2
-  version: 1364adb2c63445016c5ed4518fc71f6a3cda6169
+  version: b5adcc2dcdf009d0391547edc6ecbaff889f5bb9
   subpackages:
   - internal
 - name: google.golang.org/appengine
-  version: 267c27e7492265b84fc6719503b14a1e17975d79
+  version: 12d5545dc1cfa6047a286d5e853841b6471f4c19
   subpackages:
-  - urlfetch
   - internal
-  - internal/urlfetch
   - internal/base
   - internal/datastore
   - internal/log
   - internal/remote_api
+  - internal/urlfetch
+  - urlfetch
 testImports: []
