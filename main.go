@@ -42,6 +42,22 @@ func main() {
 	}
 	app.Commands = []cli.Command{
 		cli.Command{
+			Name:      "release",
+			Action:    actions.ReleaseComponent(ghclient, os.Stdout),
+			Usage:     "create a new tagged release of a Deis component",
+			ArgsUsage: "<component> <new-tag>",
+			Flags: []cli.Flag{
+				cli.BoolTFlag{
+					Name:  "dry-run",
+					Usage: "print the actions to be taken, but don't change anything (default: true)",
+				},
+				cli.StringFlag{
+					Name:  "sha",
+					Usage: "commit to be tagged as a new release. (default: HEAD of master)",
+				},
+			},
+		},
+		cli.Command{
 			Name: "changelog",
 			Subcommands: []cli.Command{
 				cli.Command{
