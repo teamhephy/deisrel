@@ -35,6 +35,13 @@ const (
 {{end}}
 
 {{- end}}
+{{- if (len .Tests) gt 0 }}
+#### Tests
+
+{{ range .Tests}}- {{.}}
+{{end}}
+
+{{- end}}
 {{- if (len .Maintenance) gt 0 }}
 #### Maintenance
 
@@ -55,6 +62,7 @@ type Values struct {
 	Features      []string
 	Fixes         []string
 	Documentation []string
+	Tests         []string
 	Maintenance   []string
 	Refactors     []string
 }
@@ -67,6 +75,7 @@ func MergeValues(oldRel, newRel string, vals []Values) *Values {
 		ret.Refactors = append(ret.Refactors, val.Refactors...)
 		ret.Fixes = append(ret.Fixes, val.Fixes...)
 		ret.Documentation = append(ret.Documentation, val.Documentation...)
+		ret.Tests = append(ret.Tests, val.Tests...)
 		ret.Maintenance = append(ret.Maintenance, val.Maintenance...)
 	}
 	return ret
