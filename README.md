@@ -99,7 +99,7 @@ workflowManager v2.2.0 -> v2.2.0 (clean)
 
 It's also possible to output the report in json using the `-o json` argument for easier machine parsing.
 
-Github has a very low ratelimit for unauthenticated api requests. A personal oauth token can be used to bypass this restriction. Create an oauth token with no permission and set it to `$GH_TOKEN` and deisrel will
+Github has a very low ratelimit for unauthenticated api requests. A "[personal access token][]" can be used to bypass this restriction. Create a GitHub token with "repo" permission and set it to `$GITHUB_ACCESS_TOKEN`. `deisrel` will
 use it when making requests.
 
 # Development
@@ -122,5 +122,6 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 
 [issues]: https://github.com/deis/deisrel/issues
+[personal access token]: https://github.com/settings/tokens
 [prs]: https://github.com/deis/deisrel/pulls
 [workflow]: https://github.com/deis/workflow
