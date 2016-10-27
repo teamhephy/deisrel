@@ -19,18 +19,21 @@ import (
 var version = "0.0.0" // replaced when building
 
 func main() {
-	ghclient := github.NewClient(nil)
+	app := cli.NewApp()
 
-	if token, ok := os.LookupEnv("GH_TOKEN"); ok {
-		ts := oauth2.StaticTokenSource(
-			&oauth2.Token{AccessToken: token},
-		)
-		ghclient = github.NewClient(oauth2.NewClient(oauth2.NoContext, ts))
+	token, ok := os.LookupEnv("GITHUB_ACCESS_TOKEN")
+	if !ok {
+		fmt.Println("\"GITHUB_ACCESS_TOKEN\" must be set to a valid GitHub access token.")
+		os.Exit(1)
 	}
 
-	app := cli.NewApp()
+	ts := oauth2.StaticTokenSource(
+		&oauth2.Token{AccessToken: token},
+	)
+	ghclient := github.NewClient(oauth2.NewClient(oauth2.NoContext, ts))
+
 	app.Name = "deisrel"
-	app.Usage = "Manage deis workflow releases. If you need to bypass the github ratelimit, add set github oauth token (no permissions required) to $GH_TOKEN"
+	app.Usage = "Manage deis workflow releases."
 	app.UsageText = "deisrel [options] <chart versions> <repo map>"
 	app.Version = version
 	app.Flags = []cli.Flag{
