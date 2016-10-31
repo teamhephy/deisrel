@@ -10,7 +10,7 @@ type errTagNotFoundForRepo struct {
 }
 
 func (e errTagNotFoundForRepo) Error() string {
-	return fmt.Sprintf("tag %s not found for repo %s", e.tagName, e.repoName)
+	return fmt.Sprintf("tag %s not found for repo %s; Changelog entries will need to be added in manually", e.tagName, e.repoName)
 }
 
 type errCouldNotCompareCommits struct {
