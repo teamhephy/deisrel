@@ -50,8 +50,9 @@ func GenerateIndividualChangelog(client *github.Client, dest io.Writer) func(*cl
 		skippedCommits, err := changelog.SingleRepoVals(client, vals, sha, repoName, false)
 
 		if len(skippedCommits) > 0 {
+			fmt.Fprintln(os.Stderr, "skipping the following commits:")
 			for _, ci := range skippedCommits {
-				fmt.Fprintln(os.Stderr, "skipping commit", ci)
+				fmt.Fprintln(os.Stderr, "-", ci)
 			}
 		}
 

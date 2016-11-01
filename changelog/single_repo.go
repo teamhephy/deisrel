@@ -57,7 +57,7 @@ func SingleRepoVals(client *github.Client, vals *Values, sha, name string, inclu
 		} else if strings.HasPrefix(commitMessage, "chore(") {
 			vals.Maintenance = append(vals.Maintenance, changelogMessage)
 		} else {
-			skippedCommits = append(skippedCommits, *commit.SHA)
+			skippedCommits = append(skippedCommits, changelogMessage)
 		}
 	}
 	return skippedCommits, nil
