@@ -1,12 +1,22 @@
 package changelog
 
 import (
+	"fmt"
 	"text/template"
 )
 
 const (
-	tplStr = `### {{.OldRelease}} -> {{.NewRelease}}
+	tplStr = `{{ if and .OldRelease .NewRelease }}
+### {{.OldRelease}} -> {{.NewRelease}}
+{{end}}
 
+{{ if (len .Releases) gt 0 -}}
+#### Releases
+
+{{range .Releases}}- {{.}}
+{{end}}
+
+{{- end}}
 {{ if (len .Features) gt 0 -}}
 #### Features
 
@@ -55,8 +65,16 @@ var (
 	Tpl = template.Must(template.New("changelog").Parse(tplStr))
 )
 
+// ByName takes an array of Values structs and sorts in alphabetical order of name
+type ByName []Values
+
+func (v ByName) Len() int           { return len(v) }
+func (v ByName) Swap(i, j int)      { v[i], v[j] = v[j], v[i] }
+func (v ByName) Less(i, j int) bool { return v[i].RepoName < v[j].RepoName }
+
 // Values represents the values that are required to render a changelog
 type Values struct {
+	RepoName      string
 	OldRelease    string
 	NewRelease    string
 	Features      []string
@@ -65,6 +83,7 @@ type Values struct {
 	Tests         []string
 	Maintenance   []string
 	Refactors     []string
+	Releases      []string
 }
 
 // MergeValues merges all of the slices in vals together into a single Values struct which has OldRelease set to oldRel and NewRelease set to newRel
@@ -77,6 +96,9 @@ func MergeValues(oldRel, newRel string, vals []Values) *Values {
 		ret.Documentation = append(ret.Documentation, val.Documentation...)
 		ret.Tests = append(ret.Tests, val.Tests...)
 		ret.Maintenance = append(ret.Maintenance, val.Maintenance...)
+		if (val.OldRelease != val.NewRelease) {
+			ret.Releases = append(ret.Releases, fmt.Sprintf("%s %s -> %s", val.RepoName, val.OldRelease, val.NewRelease))
+		}
 	}
 	return ret
 }

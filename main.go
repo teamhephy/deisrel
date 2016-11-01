@@ -66,7 +66,7 @@ func main() {
 				cli.Command{
 					Name:        "global",
 					Action:      actions.GenerateChangelog(ghclient, os.Stdout),
-					Usage:       "deisrel changelog global <repo map> <old-release> <new-release>",
+					Usage:       "deisrel changelog global <previous chart release params file> <repo map>",
 					Description: "Aggregate changelog entries from all known repositories for a specified release",
 				},
 				cli.Command{

@@ -136,13 +136,15 @@ func TestTemplate(t *testing.T) {
 }
 
 func TestMergeValues(t *testing.T) {
-	val1 := Values{Features: []string{"feat1"}}
-	val2 := Values{Fixes: []string{"fix1"}, Features: []string{"feat2"}}
-	res := MergeValues("old", "new", []Values{val1, val2})
+	val1 := Values{RepoName: "repo-a", OldRelease: "v1.2.3", NewRelease: "v1.2.4", Features: []string{"feat1"}}
+	val2 := Values{RepoName: "repo-b", OldRelease: "v4.5.6", NewRelease: "v4.6.0", Fixes: []string{"fix1"}, Features: []string{"feat2"}}
+	val3 := Values{OldRelease: "v1.2.3", NewRelease: "v1.2.3"} // no change; should not be added to res.Releases
+	res := MergeValues("old", "new", []Values{val1, val2, val3})
 	assert.Equal(t, res.OldRelease, "old", "old release")
 	assert.Equal(t, res.NewRelease, "new", "new release")
 	assert.Equal(t, len(res.Features), 2, "length of features slice")
 	assert.Equal(t, len(res.Fixes), 1, "length of fixes slice")
 	assert.Equal(t, res.Features, []string{"feat1", "feat2"}, "features slice")
 	assert.Equal(t, res.Fixes, []string{"fix1"}, "fixes slice")
+	assert.Equal(t, res.Releases, []string{"repo-a v1.2.3 -> v1.2.4", "repo-b v4.5.6 -> v4.6.0"}, "releases slice")
 }
