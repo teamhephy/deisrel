@@ -36,6 +36,7 @@ func TestTemplate(t *testing.T) {
 				Fixes:         fixes,
 				Refactors:     refactor,
 				Documentation: documentation,
+				Tests:         tests,
 				Maintenance:   maintenance,
 			},
 			missing: "",

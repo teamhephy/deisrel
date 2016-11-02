@@ -44,21 +44,8 @@ func SingleRepoVals(client *github.Client, vals *Values, sha, name string, inclu
 		if includeRepoName {
 			changelogMessage = fmt.Sprintf("%s (%s) - %s: %s", shortSHALink, name, focus, title)
 		}
-		if strings.HasPrefix(commitMessage, "feat(") {
-			vals.Features = append(vals.Features, changelogMessage)
-		} else if strings.HasPrefix(commitMessage, "ref(") {
-			vals.Refactors = append(vals.Refactors, changelogMessage)
-		} else if strings.HasPrefix(commitMessage, "fix(") {
-			vals.Fixes = append(vals.Fixes, changelogMessage)
-		} else if strings.HasPrefix(commitMessage, "docs(") || strings.HasPrefix(commitMessage, "doc(") {
-			vals.Documentation = append(vals.Documentation, changelogMessage)
-		} else if strings.HasPrefix(commitMessage, "test(") || strings.HasPrefix(commitMessage, "tests(") {
-			vals.Tests = append(vals.Tests, changelogMessage)
-		} else if strings.HasPrefix(commitMessage, "chore(") {
-			vals.Maintenance = append(vals.Maintenance, changelogMessage)
-		} else {
-			skippedCommits = append(skippedCommits, changelogMessage)
-		}
+
+		skippedCommits = appendToValues(vals, commitMessage, changelogMessage)
 	}
 	return skippedCommits, nil
 }
@@ -70,4 +57,29 @@ func shortSHATransform(s string) (string, error) {
 		return "", ErrSHANotLongEnough
 	}
 	return s[:7], nil
+}
+
+// appendToValues appends a changelogMessage to vals depending on commitMessage,
+// returning any skipped commits
+func appendToValues(vals *Values, commitMessage, changelogMessage string) []string {
+	var skippedCommits []string
+
+	if strings.HasPrefix(commitMessage, "feat(") {
+		vals.Features = append(vals.Features, changelogMessage)
+	} else if strings.HasPrefix(commitMessage, "ref(") {
+		vals.Refactors = append(vals.Refactors, changelogMessage)
+	} else if strings.HasPrefix(commitMessage, "fix(") {
+		vals.Fixes = append(vals.Fixes, changelogMessage)
+	} else if strings.HasPrefix(commitMessage, "docs(") || strings.HasPrefix(commitMessage, "doc(") {
+		vals.Documentation = append(vals.Documentation, changelogMessage)
+	} else if strings.HasPrefix(commitMessage, "test(") || strings.HasPrefix(commitMessage, "tests(") {
+		vals.Tests = append(vals.Tests, changelogMessage)
+	} else if strings.HasPrefix(commitMessage, "chore(") {
+		vals.Maintenance = append(vals.Maintenance, changelogMessage)
+	} else {
+		if (!strings.HasPrefix(commitMessage, "Merge pull request")) {
+			skippedCommits = append(skippedCommits, changelogMessage)
+		}
+	}
+	return skippedCommits
 }
