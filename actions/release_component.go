@@ -9,6 +9,7 @@ import (
 	"os"
 	"regexp"
 	"strings"
+	"time"
 
 	"github.com/google/go-github/github"
 	"github.com/urfave/cli"
@@ -60,6 +61,8 @@ Create release for Deis %s %s?`
 				TagName:         &newTag,
 				Name:            &releaseName,
 				Body:            &changelog,
+				CreatedAt:       &github.Timestamp{time.Now()},
+				PublishedAt:     &github.Timestamp{time.Now()},
 			}
 			rel, _, err := client.Repositories.CreateRelease("deis", component, &release)
 			if err != nil {
