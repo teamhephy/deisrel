@@ -14,7 +14,7 @@ var diffURLFormat = "https://github.com/deis/%s/compare/%s...master"
 type ComponentVersion struct {
 	Name             string `json:"name"`
 	ChartVersion     string `json:"chart"`
-	ComponentVersion string `json:"components"`
+	ComponentVersion string `json:"component"`
 	Diff             string `json:"diff"`
 	Clean            bool   `json:"clean"`
 }
@@ -26,39 +26,44 @@ func (v ByName) Swap(i, j int)      { v[i], v[j] = v[j], v[i] }
 func (v ByName) Less(i, j int) bool { return v[i].Name < v[j].Name }
 
 // CheckVersions checks the versions of all components
-func CheckVersions(chart map[string]interface{}, repositoryMap map[string][]string,
+func CheckVersions(chart map[string]interface{}, repositoryMap map[string]string,
 	ghclient *github.Client) ([]ComponentVersion, error) {
 	versions := []ComponentVersion{}
-	for repo, names := range repositoryMap {
-		for _, name := range names {
-			version := ComponentVersion{Name: name}
-			version.ChartVersion = getChartVersion(chart, name)
 
-			componentVersion, err := getRespositoryVersion(ghclient, repo)
-			if err != nil {
-				fmt.Fprintln(os.Stderr, err)
-			}
-			version.ComponentVersion = componentVersion
+	for repo, name := range repositoryMap {
+		version := ComponentVersion{Name: name}
+		version.ChartVersion = getChartVersion(chart, name)
 
-			// Check if tag points to latest commit on master
-			clean, err := checkTag(ghclient, repo, version.ComponentVersion)
-			if err != nil {
-				fmt.Fprintln(os.Stderr, err)
-			}
-			version.Clean = clean
-
-			version.Diff = fmt.Sprintf(diffURLFormat, repo, version.ComponentVersion)
-
-			versions = append(versions, version)
+		componentVersion, err := getRespositoryVersion(ghclient, repo)
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err)
 		}
+		version.ComponentVersion = componentVersion
+
+		// Check if tag points to latest commit on master
+		clean, err := checkTag(ghclient, repo, version.ComponentVersion)
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err)
+		}
+		version.Clean = clean
+
+		version.Diff = fmt.Sprintf(diffURLFormat, repo, version.ComponentVersion)
+
+		versions = append(versions, version)
 	}
 	return versions, nil
 }
 
 func getChartVersion(chart map[string]interface{}, component string) string {
-	if v, ok := chart[component]; ok {
-		if v, ok := v.(map[string]interface{})["dockerTag"]; ok {
-			return v.(string)
+	if dependencies, ok := chart["dependencies"].([]interface{}); ok {
+		for _, dependency := range dependencies {
+			if name, ok := dependency.(map[interface{}]interface{})["name"]; ok {
+				if name == component {
+					if version, ok := dependency.(map[interface{}]interface{})["version"]; ok {
+						return version.(string)
+					}
+				}
+			}
 		}
 	}
 
