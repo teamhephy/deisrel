@@ -8,12 +8,13 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/BurntSushi/toml"
-	"github.com/deis/deisrel/actions"
-	"github.com/deis/deisrel/components"
 	"github.com/google/go-github/github"
 	"github.com/urfave/cli"
 	"golang.org/x/oauth2"
+	"gopkg.in/yaml.v2"
+
+	"github.com/deis/deisrel/actions"
+	"github.com/deis/deisrel/components"
 )
 
 var version = "0.0.0" // replaced when building
@@ -66,7 +67,7 @@ func main() {
 				cli.Command{
 					Name:        "global",
 					Action:      actions.GenerateChangelog(ghclient, os.Stdout),
-					Usage:       "deisrel changelog global <previous chart release params file> <repo map>",
+					Usage:       "deisrel changelog global <previous chart requirements.lock> <repo map>",
 					Description: "Aggregate changelog entries from all known repositories for a specified release",
 				},
 				cli.Command{
@@ -93,7 +94,7 @@ func main() {
 		res := make(map[string]interface{})
 
 		if c.NArg() < 2 {
-			return cli.NewExitError("A params and a repo mapping file is required", 1)
+			return cli.NewExitError("A requirements.lock file and a repo mapping file are required", 1)
 		}
 
 		out, err := ioutil.ReadFile(c.Args().Get(0))
@@ -101,12 +102,12 @@ func main() {
 			return cli.NewExitError(err.Error(), 2)
 		}
 
-		err = toml.Unmarshal(out, &res)
+		err = yaml.Unmarshal(out, &res)
 		if err != nil {
 			return cli.NewExitError(err.Error(), 3)
 		}
 
-		mapping := make(map[string][]string)
+		mapping := make(map[string]string)
 		out, err = ioutil.ReadFile(c.Args().Get(1))
 		if err != nil {
 			return cli.NewExitError(err.Error(), 2)
@@ -150,7 +151,7 @@ func main() {
 
 				fmt.Printf("%s%s %s -> %s (%s)\n", version.Name, padding, version.ChartVersion, version.ComponentVersion, cleanMsg)
 				if !version.Clean {
-					fmt.Printf("\t%s has unrelased changes. See %s\n", version.Name, version.Diff)
+					fmt.Printf("\t%s has unreleased changes. See %s\n", version.Name, version.Diff)
 				}
 			}
 		} else {

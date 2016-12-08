@@ -1,16 +1,14 @@
-hash: 07653ad15621f1ffaf7be779a12e5dd715cf6d70d9254e8b249c088218be49fc
-updated: 2016-10-19T15:27:03.2871556-06:00
+hash: 8911dd6e65cbd7bf887d832bf7f79ff6f9c8bc0043ac2674148f93037fe8a929
+updated: 2016-12-05T17:36:55.277497818-07:00
 imports:
 - name: github.com/arschles/assert
   version: bb58b908265b5931732079df03f2818bf2167ba0
-- name: github.com/BurntSushi/toml
-  version: 99064174e013895bbd9b025c31100bd1d9b590ca
 - name: github.com/golang/protobuf
   version: df1d3ca07d2d07bba352d5b73c4313b4e2a6203e
   subpackages:
   - proto
 - name: github.com/google/go-github
-  version: ed33550bbf49ddffcc36e1309d3f58ed0b6c2305
+  version: dccec7b5f17234b8219494c2b5b03af034e08c04
   subpackages:
   - github
 - name: github.com/google/go-querystring
@@ -18,7 +16,7 @@ imports:
   subpackages:
   - query
 - name: github.com/urfave/cli
-  version: 55f715e28c46073d0e217e2ce8eb46b0b45e3db6
+  version: 0bdeddeeb0f650497d603c4ad7b20cfe685682f6
 - name: golang.org/x/net
   version: fb93926129b8ec0056f2f458b1f519654814edf0
   subpackages:
@@ -37,4 +35,6 @@ imports:
   - internal/remote_api
   - internal/urlfetch
   - urlfetch
+- name: gopkg.in/yaml.v2
+  version: a83829b6f1293c91addabc89d0571c246397bbf4
 testImports: []

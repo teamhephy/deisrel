@@ -8,11 +8,12 @@ import (
 	"sort"
 	"sync"
 
-	"github.com/BurntSushi/toml"
-	"github.com/deis/deisrel/changelog"
-	"github.com/deis/deisrel/components"
 	"github.com/google/go-github/github"
 	"github.com/urfave/cli"
+	"gopkg.in/yaml.v2"
+
+	"github.com/deis/deisrel/changelog"
+	"github.com/deis/deisrel/components"
 )
 
 // GenerateChangelog is the CLI action for creating an aggregated changelog from all of the Deis Workflow repos.
@@ -21,7 +22,7 @@ func GenerateChangelog(client *github.Client, dest io.Writer) func(*cli.Context)
 		paramsFile := c.Args().Get(0)
 		repoMapFile := c.Args().Get(1)
 		if paramsFile == "" || repoMapFile == "" {
-			log.Fatal("Usage: changelog global <previous chart release params file> <repo map>")
+			log.Fatal("Usage: changelog global <previous chart requirements.lock file> <repo map>")
 		}
 		versions := []components.ComponentVersion{}
 
@@ -30,11 +31,11 @@ func GenerateChangelog(client *github.Client, dest io.Writer) func(*cli.Context)
 		if err != nil {
 			return cli.NewExitError(err.Error(), 2)
 		}
-		if err := toml.Unmarshal(out, &res); err != nil {
+		if err := yaml.Unmarshal(out, &res); err != nil {
 			return cli.NewExitError(err.Error(), 3)
 		}
 
-		mapping := make(map[string][]string)
+		mapping := make(map[string]string)
 		out, err = ioutil.ReadFile(repoMapFile)
 		if err != nil {
 			return cli.NewExitError(err.Error(), 2)
@@ -62,7 +63,7 @@ func GenerateChangelog(client *github.Client, dest io.Writer) func(*cli.Context)
 	}
 }
 
-func generateChangelogVals(client *github.Client, repoMap map[string][]string, versions []components.ComponentVersion) ([]changelog.Values, []error) {
+func generateChangelogVals(client *github.Client, repoMap map[string]string, versions []components.ComponentVersion) ([]changelog.Values, []error) {
 	var wg sync.WaitGroup
 	done := make(chan bool)
 	valsCh := make(chan changelog.Values)
@@ -72,7 +73,7 @@ func generateChangelogVals(client *github.Client, repoMap map[string][]string, v
 		wg.Add(1)
 		go func(repo string) {
 			defer wg.Done()
-			component := repoMap[repo][0]
+			component := repoMap[repo]
 			componentVersion, err := findComponentVersionByName(versions, component)
 			if err != nil {
 				errCh <- err

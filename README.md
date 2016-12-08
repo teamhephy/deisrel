@@ -40,7 +40,15 @@ Once done, you can then move the client binary anywhere on your PATH:
 
 # Usage
 
-deisrel requires two files, the `generate_params.toml` file from [deis/charts](https://github.com/deis/charts), and a repository mapping file, allowing deisrel to map between a repository and the component name.
+deisrel requires two files, the `requirements.lock` file from a [Kubernetes Helm](https://github.com/kubernetes/helm) Workflow chart,
+and a repository mapping file, allowing deisrel to map between a repository and chart name.
+
+You may fetch the `requirements.lock` file from a given chart in the following manner:
+
+	$ helm repo add deis https://charts.deis.com/workflow
+	$ helm fetch --untar deis/workflow --version v2.9.0
+	$ cat workflow/requirements.lock
+
 
 Since the deis repositories are changing rapidly, right now the repository mapping file should be manually created.
 
@@ -48,53 +56,58 @@ Here's an example file:
 
 ```json
 {
-  "builder": ["builder"],
-  "controller": ["controller"],
-  "dockerbuilder": ["dockerbuilder"],
-  "fluentd": ["fluentd"],
-  "monitor": ["influxdb", "grafana", "telegraf"],
-  "logger": ["logger"],
-  "minio": ["minio"],
-  "nsq": ["nsqd"],
-  "postgres": ["database"],
-  "redis": ["loggerRedis"],
-  "registry": ["registry"],
-  "registry-proxy": ["registry_proxy"],
-  "registry-token-refresher": ["registry_token_refresher"],
-  "router": ["router"],
-  "slugbuilder": ["slugbuilder"],
-  "slugrunner": ["slugrunner"],
-  "workflow-cli": ["workflow-cli"],
-  "workflow-manager": ["workflowManager"],
-  "workflow-e2e": ["workflow-e2e"]
+  "builder": "builder",
+  "controller": "controller",
+  "dockerbuilder": "dockerbuilder",
+  "fluentd": "fluentd",
+  "monitor": "monitor",
+  "logger": "logger",
+  "minio": "minio",
+  "nsq": "nsqd",
+  "postgres": "database",
+  "redis": "redis",
+  "registry": "registry",
+  "registry-proxy": "registry-proxy",
+  "registry-token-refresher": "registry-token-refresher",
+  "router": "router",
+  "slugbuilder": "slugbuilder",
+  "slugrunner": "slugrunner",
+  "workflow": "workflow",
+  "workflow-cli": "workflow-cli",
+  "workflow-e2e": "workflow-e2e",
+  "workflow-manager": "workflow-manager"
 }
 ```
 
-The key is the repository name, and the values are the names of components using that repository, as found in the `generate_params.toml` file.
+The key is the repository name, and the value is the chart name, as found in the `requirements.lock` file.
 
 With these two files, you can use deisrel to generate a report:
 
 ```console
-$ deisrel path/to/generate_params.toml path/to/repomapping.json
-builder         v2.2.0 -> v2.2.0 (dirty)
-	builder has unrelased changes. See https://github.com/deis/builder/compare/v2.2.0...master
-controller      v2.2.0 -> v2.2.1 (dirty)
-	controller has unrelased changes. See https://github.com/deis/controller/compare/v2.2.1...master
-database        v2.2.0 -> v2.2.0 (clean)
-dockerbuilder   v2.2.0 -> v2.2.0 (clean)
-fluentd         v2.2.0 -> v2.2.0 (clean)
-grafana         v2.2.0 -> v2.2.0 (clean)
-influxdb        v2.2.0 -> v2.2.0 (clean)
-logger          v2.2.0 -> v2.2.0 (clean)
-loggerRedis     v2.2.0 -> v2.2.0 (clean)
-minio           v2.2.0 -> v2.2.0 (clean)
-nsqd            v2.2.0 -> v2.2.0 (clean)
-registry        v2.2.0 -> v2.2.0 (clean)
-router          v2.2.0 -> v2.2.0 (clean)
-slugbuilder     v2.2.0 -> v2.2.0 (clean)
-slugrunner      v2.2.0 -> v2.2.0 (clean)
-telegraf        v2.2.0 -> v2.2.0 (clean)
-workflowManager v2.2.0 -> v2.2.0 (clean)
+$ deisrel path/to/requirements.lock path/to/repomapping.json
+builder                  v2.6.1 -> v2.6.1 (clean)
+controller               v2.9.0 -> v2.9.0 (dirty)
+	controller has unreleased changes. See https://github.com/deis/controller/compare/v2.9.0...master
+database                 v2.4.4 -> v2.4.4 (clean)
+dockerbuilder            v2.5.2 -> v2.5.2 (clean)
+fluentd                  v2.5.0 -> v2.5.0 (clean)
+logger                   v2.4.0 -> v2.4.0 (clean)
+minio                    v2.3.4 -> v2.3.4 (clean)
+monitor                  v2.7.0 -> v2.7.0 (clean)
+nsqd                     v2.2.5 -> v2.2.5 (clean)
+redis                    v2.2.4 -> v2.2.4 (clean)
+registry                 v2.3.1 -> v2.3.1 (clean)
+registry-proxy           v1.1.1 -> v1.1.1 (clean)
+registry-token-refresher v1.0.4 -> v1.0.4 (clean)
+router                   v2.7.0 -> v2.7.0 (clean)
+slugbuilder              v2.4.7 -> v2.4.7 (dirty)
+	slugbuilder has unreleased changes. See https://github.com/deis/slugbuilder/compare/v2.4.7...master
+slugrunner               v2.2.4 -> v2.2.4 (clean)
+workflow                 unknown -> v2.9.0 (clean)
+workflow-cli             unknown -> v2.9.1 (clean)
+workflow-e2e             unknown -> v2.7.1 (dirty)
+	workflow-e2e has unreleased changes. See https://github.com/deis/workflow-e2e/compare/v2.7.1...master
+workflow-manager         v2.4.4 -> v2.4.4 (clean)
 ```
 
 It's also possible to output the report in json using the `-o json` argument for easier machine parsing.
