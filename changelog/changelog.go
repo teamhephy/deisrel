@@ -10,14 +10,14 @@ const (
 ### {{.OldRelease}} -> {{.NewRelease}}
 {{end}}
 
-{{ if (len .Releases) gt 0 -}}
+{{- if (len .Releases) gt 0 }}
 #### Releases
 
 {{range .Releases}}- {{.}}
 {{end}}
 
 {{- end}}
-{{ if (len .Features) gt 0 -}}
+{{- if (len .Features) gt 0 }}
 #### Features
 
 {{range .Features}}- {{.}}
