@@ -54,25 +54,31 @@ Please review the above changelog contents and ensure:
 
 Create release for Deis %s %s?`
 		if !dryRun && askForConfirmation(fmt.Sprintf(prompt, title, newTag)) {
-			releaseName := fmt.Sprintf("Deis %s %s", title, newTag)
-
-			release := github.RepositoryRelease{
-				TargetCommitish: &sha,
-				TagName:         &newTag,
-				Name:            &releaseName,
-				Body:            &changelog,
-				CreatedAt:       &github.Timestamp{time.Now()},
-				PublishedAt:     &github.Timestamp{time.Now()},
-			}
-			rel, _, err := client.Repositories.CreateRelease("deis", component, &release)
+			rel, _, err := createRelease(client, component, title, sha, newTag, changelog)
 			if err != nil {
 				return err
 			}
+
 			fmt.Fprintf(dest, "New release is available at %s\n", *rel.HTMLURL)
 		}
 
 		return nil
 	}
+}
+
+func createRelease(client *github.Client, component, title, sha, newTag, changelog string) (*github.RepositoryRelease, *github.Response, error) {
+	releaseName := fmt.Sprintf("Deis %s %s", title, newTag)
+
+	release := github.RepositoryRelease{
+		TargetCommitish: &sha,
+		TagName:         &newTag,
+		Name:            &releaseName,
+		Body:            &changelog,
+		CreatedAt:       &github.Timestamp{time.Now()},
+		PublishedAt:     &github.Timestamp{time.Now()},
+	}
+
+	return client.Repositories.CreateRelease("deis", component, &release)
 }
 
 func isValidSemVerTag(tag string) bool {
