@@ -45,7 +45,7 @@ func SingleRepoVals(client *github.Client, vals *Values, sha, name string, inclu
 			changelogMessage = fmt.Sprintf("%s (%s) - %s: %s", shortSHALink, name, focus, title)
 		}
 
-		skippedCommits = appendToValues(vals, commitMessage, changelogMessage)
+		skippedCommits = appendToValues(vals, commitMessage, changelogMessage, skippedCommits)
 	}
 	return skippedCommits, nil
 }
@@ -60,10 +60,8 @@ func shortSHATransform(s string) (string, error) {
 }
 
 // appendToValues appends a changelogMessage to vals depending on commitMessage,
-// returning any skipped commits
-func appendToValues(vals *Values, commitMessage, changelogMessage string) []string {
-	var skippedCommits []string
-
+// returning any skipped commits (which will be appended to the provided skippedCommits)
+func appendToValues(vals *Values, commitMessage, changelogMessage string, skippedCommits []string) []string {
 	if strings.HasPrefix(commitMessage, "feat(") {
 		vals.Features = append(vals.Features, changelogMessage)
 	} else if strings.HasPrefix(commitMessage, "ref(") {
@@ -77,7 +75,7 @@ func appendToValues(vals *Values, commitMessage, changelogMessage string) []stri
 	} else if strings.HasPrefix(commitMessage, "chore(") {
 		vals.Maintenance = append(vals.Maintenance, changelogMessage)
 	} else {
-		if (!strings.HasPrefix(commitMessage, "Merge pull request")) {
+		if !strings.HasPrefix(commitMessage, "Merge pull request") {
 			skippedCommits = append(skippedCommits, changelogMessage)
 		}
 	}
