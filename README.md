@@ -50,64 +50,33 @@ You may fetch the `requirements.lock` file from a given chart in the following m
 	$ cat workflow/requirements.lock
 
 
-Since the deis repositories are changing rapidly, right now the repository mapping file should be manually created.
-
-Here's an example file:
-
-```json
-{
-  "builder": "builder",
-  "controller": "controller",
-  "dockerbuilder": "dockerbuilder",
-  "fluentd": "fluentd",
-  "monitor": "monitor",
-  "logger": "logger",
-  "minio": "minio",
-  "nsq": "nsqd",
-  "postgres": "database",
-  "redis": "redis",
-  "registry": "registry",
-  "registry-proxy": "registry-proxy",
-  "registry-token-refresher": "registry-token-refresher",
-  "router": "router",
-  "slugbuilder": "slugbuilder",
-  "slugrunner": "slugrunner",
-  "workflow": "workflow",
-  "workflow-cli": "workflow-cli",
-  "workflow-e2e": "workflow-e2e",
-  "workflow-manager": "workflow-manager"
-}
-```
-
-The key is the repository name, and the value is the chart name, as found in the `requirements.lock` file.
+As the Workflow component list has stabilized, the repository mapping file (`map.json`) at the root of this project may be used.  (However, it will need to be updated when/if the list changes.)  The key is the repository name, and the value is the chart name, as found in the `requirements.lock` file.
 
 With these two files, you can use deisrel to generate a report:
 
 ```console
 $ deisrel path/to/requirements.lock path/to/repomapping.json
-builder                  v2.6.1 -> v2.6.1 (clean)
-controller               v2.9.0 -> v2.9.0 (dirty)
-	controller has unreleased changes. See https://github.com/deis/controller/compare/v2.9.0...master
-database                 v2.4.4 -> v2.4.4 (clean)
-dockerbuilder            v2.5.2 -> v2.5.2 (clean)
-fluentd                  v2.5.0 -> v2.5.0 (clean)
-logger                   v2.4.0 -> v2.4.0 (clean)
-minio                    v2.3.4 -> v2.3.4 (clean)
-monitor                  v2.7.0 -> v2.7.0 (clean)
-nsqd                     v2.2.5 -> v2.2.5 (clean)
-redis                    v2.2.4 -> v2.2.4 (clean)
-registry                 v2.3.1 -> v2.3.1 (clean)
-registry-proxy           v1.1.1 -> v1.1.1 (clean)
-registry-token-refresher v1.0.4 -> v1.0.4 (clean)
-router                   v2.7.0 -> v2.7.0 (clean)
-slugbuilder              v2.4.7 -> v2.4.7 (dirty)
-	slugbuilder has unreleased changes. See https://github.com/deis/slugbuilder/compare/v2.4.7...master
-slugrunner               v2.2.4 -> v2.2.4 (clean)
-workflow                 unknown -> v2.9.0 (clean)
-workflow-cli             unknown -> v2.9.1 (clean)
-workflow-e2e             unknown -> v2.7.1 (dirty)
-	workflow-e2e has unreleased changes. See https://github.com/deis/workflow-e2e/compare/v2.7.1...master
-workflow-manager         v2.4.4 -> v2.4.4 (clean)
+builder                  v2.6.1 -> v2.7.1 (dirty)
+	builder has unreleased changes. See https://github.com/deis/builder/compare/v2.7.1...master
+controller               v2.10.0 -> v2.11.0 (dirty)
+	controller has unreleased changes. See https://github.com/deis/controller/compare/v2.11.0...master
+database                 v2.5.0 -> v2.5.1 (clean)
+dockerbuilder            v2.5.2 -> v2.6.0 (clean)
+fluentd                  v2.6.0 -> v2.6.1 (clean)
+logger                   v2.4.1 -> v2.4.2 (clean)
+minio                    v2.3.4 -> v2.3.5 (clean)
+monitor                  v2.7.0 -> v2.7.1 (clean)
+nsqd                     v2.2.5 -> v2.2.6 (clean)
+redis                    v2.2.4 -> v2.2.5 (clean)
+registry                 v2.3.2 -> v2.3.3 (clean)
+registry-proxy           v1.1.1 -> v1.1.1 (dirty)
+	registry-proxy has unreleased changes. See https://github.com/deis/registry-proxy/compare/v1.1.1...master
+registry-token-refresher v1.1.0 -> v1.1.1 (clean)
+router                   v2.8.1 -> v2.9.0 (clean)
+slugbuilder              v2.4.8 -> v2.4.9 (clean)
+slugrunner               v2.2.4 -> v2.2.4 (dirty)
+	slugrunner has unreleased changes. See https://github.com/deis/slugrunner/compare/v2.2.4...master
+workflow-manager         v2.4.4 -> v2.4.5 (clean)
 ```
 
 It's also possible to output the report in json using the `-o json` argument for easier machine parsing.
