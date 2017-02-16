@@ -5,6 +5,7 @@ import (
 	"io"
 	"io/ioutil"
 	"log"
+	"os"
 	"sort"
 	"sync"
 
@@ -16,6 +17,8 @@ import (
 	"github.com/deis/deisrel/components"
 )
 
+var auxiliaryRepos = []string{"workflow-cli", "workflow-e2e"}
+
 // GenerateChangelog is the CLI action for creating an aggregated changelog from all of the Deis Workflow repos.
 func GenerateChangelog(client *github.Client, dest io.Writer) func(*cli.Context) error {
 	return func(c *cli.Context) error {
@@ -24,8 +27,20 @@ func GenerateChangelog(client *github.Client, dest io.Writer) func(*cli.Context)
 		if paramsFile == "" || repoMapFile == "" {
 			log.Fatal("Usage: changelog global <previous chart requirements.lock file> <repo map>")
 		}
-		versions := []components.ComponentVersion{}
+		var versions []components.ComponentVersion
+		var vals []changelog.Values
 
+		// First, assemble anticipated changelog for Workflow itself
+		if os.Getenv("WORKFLOW_PREV_RELEASE") == "" || os.Getenv("WORKFLOW_RELEASE") == "" {
+			log.Fatalf("Please be sure to set WORKFLOW_PREV_RELEASE and WORKFLOW_RELEASE before proceeding.")
+		}
+		workflowVals := changelog.Values{RepoName: "workflow", OldRelease: os.Getenv("WORKFLOW_PREV_RELEASE"), NewRelease: os.Getenv("WORKFLOW_RELEASE")}
+		// We are assuming repo hasn't actually been tagged, so compare to head of master
+		if _, err := changelog.SingleRepoVals(client, &workflowVals, "master", "workflow", true); err != nil {
+			return cli.NewExitError(err.Error(), 1)
+		}
+
+		// Next, assemble changelogs for all Workflow components
 		res := make(map[string]interface{})
 		out, err := ioutil.ReadFile(paramsFile)
 		if err != nil {
@@ -49,12 +64,36 @@ func GenerateChangelog(client *github.Client, dest io.Writer) func(*cli.Context)
 			return cli.NewExitError(err.Error(), 4)
 		}
 
-		vals, errs := generateChangelogVals(client, mapping, versions)
+		componentVals, errs := generateChangelogVals(client, mapping, versions)
 		if len(errs) > 0 {
 			for _, err := range errs {
 				log.Printf("Error: %s", err)
 			}
 		}
+		vals = append(componentVals, workflowVals)
+
+		// Lastly, retrieve changelog info for auxiliary repos:
+		for _, repo := range auxiliaryRepos {
+			// GH API request for 2 most recent releases
+			opt := github.ListOptions{Page: 1, PerPage: 2}
+			releaseList, _, err := client.Repositories.ListReleases("deis", repo, &opt)
+			if err != nil {
+				log.Printf("Error: %s", err)
+			}
+			if len(releaseList) != 2 {
+				log.Fatalf("Cannot get the 2 most recent releases for repo '%s'", repo)
+			}
+			currentTag := *releaseList[0].TagName
+			penultimateTag := *releaseList[1].TagName
+
+			auxiliaryVals := changelog.Values{RepoName: repo, OldRelease: penultimateTag, NewRelease: currentTag}
+			if _, err := changelog.SingleRepoVals(client, &auxiliaryVals, currentTag, repo, true); err != nil {
+				return cli.NewExitError(err.Error(), 1)
+			}
+
+			vals = append(vals, auxiliaryVals)
+		}
+
 		sort.Sort(changelog.ByName(vals))
 		if err := changelog.Tpl.Execute(dest, changelog.MergeValues("", "", vals)); err != nil {
 			log.Fatalf("could not template changelog: %s", err)
