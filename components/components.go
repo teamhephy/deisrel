@@ -8,7 +8,7 @@ import (
 	"github.com/google/go-github/github"
 )
 
-var diffURLFormat = "https://github.com/deis/%s/compare/%s...master"
+var diffURLFormat = "https://github.com/deisthree/%s/compare/%s...master"
 
 // ComponentVersion is a combination of the different types
 type ComponentVersion struct {

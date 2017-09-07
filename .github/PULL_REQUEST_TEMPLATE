@@ -1,6 +1,6 @@
-# Associated [Documentation](https://github.com/deis/workflow) PR(s)
+# Associated [Documentation](https://github.com/deisthree/workflow) PR(s)
 
-If your change requires any additions or changes to the [Release Checklist](https://github.com/deis/workflow/blob/master/src/roadmap/release-checklist.md), please submit them as 1 or more pull requests against that repo and refer to them here.
+If your change requires any additions or changes to the [Release Checklist](https://github.com/deisthree/workflow/blob/master/src/roadmap/release-checklist.md), please submit them as 1 or more pull requests against that repo and refer to them here.
 
 Ref deis/workflow#1234
 Ref deis/workflow#5678
