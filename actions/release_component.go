@@ -52,7 +52,7 @@ Please review the above changelog contents and ensure:
   1. All intended commits are mentioned
   2. The changes agree with the semver release tag (major, minor, or patch)
 
-Create release for Deis %s %s?`
+Create release for Hephy %s %s?`
 		if !dryRun && askForConfirmation(fmt.Sprintf(prompt, title, newTag)) {
 			rel, _, err := createRelease(client, component, title, sha, newTag, changelog)
 			if err != nil {
@@ -67,7 +67,7 @@ Create release for Deis %s %s?`
 }
 
 func createRelease(client *github.Client, component, title, sha, newTag, changelog string) (*github.RepositoryRelease, *github.Response, error) {
-	releaseName := fmt.Sprintf("Deis %s %s", title, newTag)
+	releaseName := fmt.Sprintf("Hephy %s %s", title, newTag)
 
 	release := github.RepositoryRelease{
 		TargetCommitish: &sha,
@@ -78,7 +78,7 @@ func createRelease(client *github.Client, component, title, sha, newTag, changel
 		PublishedAt:     &github.Timestamp{time.Now()},
 	}
 
-	return client.Repositories.CreateRelease("deis", component, &release)
+	return client.Repositories.CreateRelease("teamhephy", component, &release)
 }
 
 func isValidSemVerTag(tag string) bool {

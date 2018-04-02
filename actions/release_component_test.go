@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/deis/deisrel/testutil"
+	"github.com/teamhephy/deisrel/testutil"
 
 	"github.com/google/go-github/github"
 )
@@ -53,9 +53,9 @@ func TestCreateRelease(t *testing.T) {
 	sha := "master"
 	newTag := "v1.2.3"
 	body := "changelog"
-	expectedName := "Deis Controller v1.2.3"
+	expectedName := "Hephy Controller v1.2.3"
 
-	ts.Mux.HandleFunc("/repos/deis/controller/releases", func(w http.ResponseWriter, r *http.Request) {
+	ts.Mux.HandleFunc("/repos/teamhephy/controller/releases", func(w http.ResponseWriter, r *http.Request) {
 		if got := r.Method; got != "POST" {
 			t.Errorf("Request method: %v, want POST", got)
 		}
