@@ -8,7 +8,7 @@ import (
 	"github.com/google/go-github/github"
 )
 
-var diffURLFormat = "https://github.com/deisthree/%s/compare/%s...master"
+var diffURLFormat = "https://github.com/teamhephy/%s/compare/%s...master"
 
 // ComponentVersion is a combination of the different types
 type ComponentVersion struct {
@@ -71,7 +71,7 @@ func getChartVersion(chart map[string]interface{}, component string) string {
 }
 
 func getRespositoryVersion(client *github.Client, repo string) (string, error) {
-	tags, _, err := client.Repositories.ListTags("deis", repo, nil)
+	tags, _, err := client.Repositories.ListTags("teamhephy", repo, nil)
 	if err != nil {
 		return "unknown", err
 	}
@@ -84,12 +84,12 @@ func getRespositoryVersion(client *github.Client, repo string) (string, error) {
 }
 
 func checkTag(client *github.Client, repo, tagName string) (bool, error) {
-	master, _, err := client.Repositories.GetBranch("deis", repo, "master")
+	master, _, err := client.Repositories.GetBranch("teamhephy", repo, "master")
 	if err != nil {
 		return false, err
 	}
 
-	object, _, err := client.Git.GetRef("deis", repo, "refs/tags/"+tagName)
+	object, _, err := client.Git.GetRef("teamhephy", repo, "refs/tags/"+tagName)
 	if err != nil {
 		return false, err
 	}
@@ -100,7 +100,7 @@ func checkTag(client *github.Client, repo, tagName string) (bool, error) {
 	}
 
 	// If tag is an annotated tag, return the object it points to.
-	tag, _, err := client.Git.GetTag("deis", repo, *object.Object.SHA)
+	tag, _, err := client.Git.GetTag("teamhephy", repo, *object.Object.SHA)
 	if err != nil {
 		return false, err
 	}

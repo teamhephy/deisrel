@@ -39,7 +39,7 @@ func SingleRepoVals(client *github.Client, vals *Values, sha, name string, inclu
 		}
 		focus := commitFocus(*commit.Commit.Message)
 		title := commitTitle(*commit.Commit.Message)
-		shortSHALink := fmt.Sprintf("[`%s`](https://github.com/deisthree/%s/commit/%s)", shortSHA, name, *commit.SHA)
+		shortSHALink := fmt.Sprintf("[`%s`](https://github.com/teamhephy/%s/commit/%s)", shortSHA, name, *commit.SHA)
 		changelogMessage := fmt.Sprintf("%s %s: %s", shortSHALink, focus, title)
 		if includeRepoName {
 			changelogMessage = fmt.Sprintf("%s (%s) - %s: %s", shortSHALink, name, focus, title)

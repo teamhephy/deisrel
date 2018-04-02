@@ -12,7 +12,7 @@ developer-friendly layer to any [Kubernetes](http://kubernetes.io) cluster, maki
 deploy and manage applications on your own servers.
 
 For more information about the Deis Workflow, please visit the main project page at
-<https://github.com/deisthree/workflow>.
+<https://github.com/teamhephy/workflow>.
 
 We welcome your input! If you have feedback, please [submit an issue][issues]. If you'd like to participate in development, please read the "Development" section below and [submit a pull request][prs].
 
@@ -29,7 +29,7 @@ You can install the latest version of `deisrel` from the following links:
 
 Alternatively, you can compile this project from source using Go 1.6+:
 
-	$ git clone https://github.com/deisthree/deisrel
+	$ git clone https://github.com/teamhephy/deisrel
 	$ cd deisrel
 	$ make bootstrap build
 	$ ./deisrel
@@ -57,9 +57,9 @@ With these two files, you can use deisrel to generate a report:
 ```console
 $ deisrel path/to/requirements.lock path/to/repomapping.json
 builder                  v2.6.1 -> v2.7.1 (dirty)
-	builder has unreleased changes. See https://github.com/deisthree/builder/compare/v2.7.1...master
+	builder has unreleased changes. See https://github.com/teamhephy/builder/compare/v2.7.1...master
 controller               v2.10.0 -> v2.11.0 (dirty)
-	controller has unreleased changes. See https://github.com/deisthree/controller/compare/v2.11.0...master
+	controller has unreleased changes. See https://github.com/teamhephy/controller/compare/v2.11.0...master
 database                 v2.5.0 -> v2.5.1 (clean)
 dockerbuilder            v2.5.2 -> v2.6.0 (clean)
 fluentd                  v2.6.0 -> v2.6.1 (clean)
@@ -70,12 +70,12 @@ nsqd                     v2.2.5 -> v2.2.6 (clean)
 redis                    v2.2.4 -> v2.2.5 (clean)
 registry                 v2.3.2 -> v2.3.3 (clean)
 registry-proxy           v1.1.1 -> v1.1.1 (dirty)
-	registry-proxy has unreleased changes. See https://github.com/deisthree/registry-proxy/compare/v1.1.1...master
+	registry-proxy has unreleased changes. See https://github.com/teamhephy/registry-proxy/compare/v1.1.1...master
 registry-token-refresher v1.1.0 -> v1.1.1 (clean)
 router                   v2.8.1 -> v2.9.0 (clean)
 slugbuilder              v2.4.8 -> v2.4.9 (clean)
 slugrunner               v2.2.4 -> v2.2.4 (dirty)
-	slugrunner has unreleased changes. See https://github.com/deisthree/slugrunner/compare/v2.2.4...master
+	slugrunner has unreleased changes. See https://github.com/teamhephy/slugrunner/compare/v2.2.4...master
 workflow-manager         v2.4.4 -> v2.4.5 (clean)
 ```
 
@@ -103,7 +103,7 @@ Licensed under the Apache License, Version 2.0 (the "License"); you may not use 
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 
-[issues]: https://github.com/deisthree/deisrel/issues
+[issues]: https://github.com/teamhephy/deisrel/issues
 [personal access token]: https://github.com/settings/tokens
-[prs]: https://github.com/deisthree/deisrel/pulls
-[workflow]: https://github.com/deisthree/workflow
+[prs]: https://github.com/teamhephy/deisrel/pulls
+[workflow]: https://github.com/teamhephy/workflow
