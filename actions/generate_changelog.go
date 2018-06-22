@@ -13,13 +13,13 @@ import (
 	"github.com/urfave/cli"
 	"gopkg.in/yaml.v2"
 
-	"github.com/deis/deisrel/changelog"
-	"github.com/deis/deisrel/components"
+	"github.com/teamhephy/deisrel/changelog"
+	"github.com/teamhephy/deisrel/components"
 )
 
 var auxiliaryRepos = []string{"workflow-cli", "workflow-e2e"}
 
-// GenerateChangelog is the CLI action for creating an aggregated changelog from all of the Deis Workflow repos.
+// GenerateChangelog is the CLI action for creating an aggregated changelog from all of the Hephy Workflow repos.
 func GenerateChangelog(client *github.Client, dest io.Writer) func(*cli.Context) error {
 	return func(c *cli.Context) error {
 		paramsFile := c.Args().Get(0)
@@ -76,7 +76,7 @@ func GenerateChangelog(client *github.Client, dest io.Writer) func(*cli.Context)
 		for _, repo := range auxiliaryRepos {
 			// GH API request for 2 most recent releases
 			opt := github.ListOptions{Page: 1, PerPage: 2}
-			releaseList, _, err := client.Repositories.ListReleases("deis", repo, &opt)
+			releaseList, _, err := client.Repositories.ListReleases("teamhephy", repo, &opt)
 			if err != nil {
 				log.Printf("Error: %s", err)
 			}

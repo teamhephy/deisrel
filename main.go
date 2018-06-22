@@ -13,8 +13,8 @@ import (
 	"golang.org/x/oauth2"
 	"gopkg.in/yaml.v2"
 
-	"github.com/deis/deisrel/actions"
-	"github.com/deis/deisrel/components"
+	"github.com/teamhephy/deisrel/actions"
+	"github.com/teamhephy/deisrel/components"
 )
 
 var version = "0.0.0" // replaced when building

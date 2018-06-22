@@ -6,7 +6,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/deis/deisrel/changelog"
+	"github.com/teamhephy/deisrel/changelog"
 	"github.com/google/go-github/github"
 	"github.com/urfave/cli"
 )
@@ -26,7 +26,7 @@ func GenerateIndividualChangelog(client *github.Client, dest io.Writer) func(*cl
 
 		// If sha isn't set, use the latest commit on master
 		if sha == "" {
-			master, _, err := client.Repositories.GetBranch("deis", repoName, "master")
+			master, _, err := client.Repositories.GetBranch("teamhephy", repoName, "master")
 			if err != nil {
 				return err
 			}
@@ -35,7 +35,7 @@ func GenerateIndividualChangelog(client *github.Client, dest io.Writer) func(*cl
 
 		// If base-tag isn't set, use the most recent in the repository
 		if vals.OldRelease == "" {
-			tags, _, err := client.Repositories.ListTags("deis", repoName, nil)
+			tags, _, err := client.Repositories.ListTags("teamhephy", repoName, nil)
 			if err != nil {
 				return err
 			}

@@ -1,32 +1,38 @@
-hash: 8911dd6e65cbd7bf887d832bf7f79ff6f9c8bc0043ac2674148f93037fe8a929
-updated: 2016-12-05T17:36:55.277497818-07:00
+hash: 55d7c5c896e19f8b3f5c0361394c59f5d02b4e1bf1995c37ac3c7fd206815ac0
+updated: 2018-06-21T21:46:04.380999738Z
 imports:
 - name: github.com/arschles/assert
   version: bb58b908265b5931732079df03f2818bf2167ba0
+- name: github.com/deis/deisrel
+  version: ef6349b071238e88a99e801a6231a59f34a0b201
+  subpackages:
+  - changelog
+  - components
 - name: github.com/golang/protobuf
-  version: df1d3ca07d2d07bba352d5b73c4313b4e2a6203e
+  version: 9f81198da99b79e14d70ca2c3cc1bbe44c6e69b6
   subpackages:
   - proto
 - name: github.com/google/go-github
-  version: dccec7b5f17234b8219494c2b5b03af034e08c04
+  version: a83ae98ad5d09188c49d6056edb60ec9bdf202bd
   subpackages:
   - github
 - name: github.com/google/go-querystring
-  version: 9235644dd9e52eeae6fa48efd539fdc351a0af53
+  version: 53e6ce116135b80d037921a7fdd5138cf32d7a8a
   subpackages:
   - query
 - name: github.com/urfave/cli
-  version: 0bdeddeeb0f650497d603c4ad7b20cfe685682f6
+  version: 8e01ec4cd3e2d84ab2fe90d8210528ffbb06d8ff
 - name: golang.org/x/net
-  version: fb93926129b8ec0056f2f458b1f519654814edf0
+  version: afe8f62b1d6bbd81f31868121a50b06d8188e1f9
   subpackages:
   - context
+  - context/ctxhttp
 - name: golang.org/x/oauth2
-  version: b5adcc2dcdf009d0391547edc6ecbaff889f5bb9
+  version: ef147856a6ddbb60760db74283d2424e98c87bff
   subpackages:
   - internal
 - name: google.golang.org/appengine
-  version: 12d5545dc1cfa6047a286d5e853841b6471f4c19
+  version: b1f26356af11148e710935ed1ac8a7f5702c7612
   subpackages:
   - internal
   - internal/base
@@ -36,5 +42,5 @@ imports:
   - internal/urlfetch
   - urlfetch
 - name: gopkg.in/yaml.v2
-  version: a83829b6f1293c91addabc89d0571c246397bbf4
+  version: 5420a8b6744d3b0345ab293f6fcba19c978f1183
 testImports: []

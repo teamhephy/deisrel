@@ -1,4 +1,4 @@
-package: github.com/deis/deisrel
+package: github.com/teamhephy/deisrel
 import:
   - package: github.com/google/go-github
   - package: golang.org/x/oauth2
