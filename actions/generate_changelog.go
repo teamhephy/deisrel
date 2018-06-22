@@ -1,6 +1,7 @@
 package actions
 
 import (
+	"context"
 	"encoding/json"
 	"io"
 	"io/ioutil"
@@ -8,7 +9,6 @@ import (
 	"os"
 	"sort"
 	"sync"
-        "context"
 
 	"github.com/google/go-github/github"
 	"github.com/urfave/cli"

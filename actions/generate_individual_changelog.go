@@ -1,14 +1,14 @@
 package actions
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"log"
 	"os"
-        "context"
 
-	"github.com/teamhephy/deisrel/changelog"
 	"github.com/google/go-github/github"
+	"github.com/teamhephy/deisrel/changelog"
 	"github.com/urfave/cli"
 )
 

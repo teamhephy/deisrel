@@ -1,11 +1,11 @@
 package changelog
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"net/http"
 	"strings"
-        "context"
 
 	"github.com/google/go-github/github"
 )

@@ -3,6 +3,7 @@ package actions
 import (
 	"bufio"
 	"bytes"
+	"context"
 	"fmt"
 	"io"
 	"log"
@@ -10,7 +11,6 @@ import (
 	"regexp"
 	"strings"
 	"time"
-        "context"
 
 	"github.com/google/go-github/github"
 	"github.com/urfave/cli"
