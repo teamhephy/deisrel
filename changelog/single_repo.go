@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
+        "context"
 
 	"github.com/google/go-github/github"
 )
@@ -18,7 +19,7 @@ var (
 // SingleRepoVals generates a changelog entry from vals.OldRelease to sha. It returns the commits that were unparseable (and had to be skipped) or any error encountered during the process. On a nil error, vals is filled in with all of the sorted changelog entries. Note that any nil commits will not be in the returned string slice
 func SingleRepoVals(client *github.Client, vals *Values, sha, name string, includeRepoName bool) ([]string, error) {
 	var skippedCommits []string
-	commitCompare, resp, err := client.Repositories.CompareCommits("teamhephy", name, vals.OldRelease, sha)
+	commitCompare, resp, err := client.Repositories.CompareCommits(context.Background(), "teamhephy", name, vals.OldRelease, sha)
 	if err != nil {
 		if resp.StatusCode == http.StatusNotFound {
 			return nil, errTagNotFoundForRepo{repoName: name, tagName: vals.OldRelease}

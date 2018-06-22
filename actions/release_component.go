@@ -10,6 +10,7 @@ import (
 	"regexp"
 	"strings"
 	"time"
+        "context"
 
 	"github.com/google/go-github/github"
 	"github.com/urfave/cli"
@@ -78,7 +79,7 @@ func createRelease(client *github.Client, component, title, sha, newTag, changel
 		PublishedAt:     &github.Timestamp{time.Now()},
 	}
 
-	return client.Repositories.CreateRelease("teamhephy", component, &release)
+	return client.Repositories.CreateRelease(context.Background(), "teamhephy", component, &release)
 }
 
 func isValidSemVerTag(tag string) bool {
