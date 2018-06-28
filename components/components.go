@@ -1,6 +1,7 @@
 package components
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"os"
@@ -71,7 +72,7 @@ func getChartVersion(chart map[string]interface{}, component string) string {
 }
 
 func getRespositoryVersion(client *github.Client, repo string) (string, error) {
-	tags, _, err := client.Repositories.ListTags("teamhephy", repo, nil)
+	tags, _, err := client.Repositories.ListTags(context.Background(), "teamhephy", repo, nil)
 	if err != nil {
 		return "unknown", err
 	}
@@ -84,12 +85,12 @@ func getRespositoryVersion(client *github.Client, repo string) (string, error) {
 }
 
 func checkTag(client *github.Client, repo, tagName string) (bool, error) {
-	master, _, err := client.Repositories.GetBranch("teamhephy", repo, "master")
+	master, _, err := client.Repositories.GetBranch(context.Background(), "teamhephy", repo, "master")
 	if err != nil {
 		return false, err
 	}
 
-	object, _, err := client.Git.GetRef("teamhephy", repo, "refs/tags/"+tagName)
+	object, _, err := client.Git.GetRef(context.Background(), "teamhephy", repo, "refs/tags/"+tagName)
 	if err != nil {
 		return false, err
 	}
@@ -100,7 +101,7 @@ func checkTag(client *github.Client, repo, tagName string) (bool, error) {
 	}
 
 	// If tag is an annotated tag, return the object it points to.
-	tag, _, err := client.Git.GetTag("teamhephy", repo, *object.Object.SHA)
+	tag, _, err := client.Git.GetTag(context.Background(), "teamhephy", repo, *object.Object.SHA)
 	if err != nil {
 		return false, err
 	}

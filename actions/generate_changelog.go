@@ -1,6 +1,7 @@
 package actions
 
 import (
+	"context"
 	"encoding/json"
 	"io"
 	"io/ioutil"
@@ -76,7 +77,7 @@ func GenerateChangelog(client *github.Client, dest io.Writer) func(*cli.Context)
 		for _, repo := range auxiliaryRepos {
 			// GH API request for 2 most recent releases
 			opt := github.ListOptions{Page: 1, PerPage: 2}
-			releaseList, _, err := client.Repositories.ListReleases("teamhephy", repo, &opt)
+			releaseList, _, err := client.Repositories.ListReleases(context.Background(), "teamhephy", repo, &opt)
 			if err != nil {
 				log.Printf("Error: %s", err)
 			}
