@@ -7,18 +7,18 @@
 
 [Download for 64 Bit Darwin](https://storage.googleapis.com/deisrel/deisrel-latest-darwin-amd64)
 
-Deis (pronounced DAY-iss) Workflow is an open source Platform as a Service (PaaS) that adds a
+Hephy (pronounced HEF-ee) Workflow is an open source Platform as a Service (PaaS) that adds a
 developer-friendly layer to any [Kubernetes](http://kubernetes.io) cluster, making it easy to
 deploy and manage applications on your own servers.
 
-For more information about the Deis Workflow, please visit the main project page at
+For more information about the Hephy Workflow, please visit the main project page at
 <https://github.com/teamhephy/workflow>.
 
 We welcome your input! If you have feedback, please [submit an issue][issues]. If you'd like to participate in development, please read the "Development" section below and [submit a pull request][prs].
 
 # About
 
-`deisrel` is a utility tool for assisting with Deis product releases. It makes is easy to check what components need to be released before making a workflow release.
+`deisrel` is a utility tool for assisting with Hephy product releases. It makes is easy to check what components need to be released before making a workflow release.
 
 # Installing deisrel
 
@@ -45,8 +45,8 @@ and a repository mapping file, allowing deisrel to map between a repository and 
 
 You may fetch the `requirements.lock` file from a given chart in the following manner:
 
-	$ helm repo add deis https://charts.deis.com/workflow
-	$ helm fetch --untar deis/workflow --version v2.9.0
+	$ helm repo add hephy https://charts.teamhephy.com
+	$ helm fetch --untar hephy/workflow --version v2.23.0
 	$ cat workflow/requirements.lock
 
 
@@ -86,13 +86,13 @@ use it when making requests.
 
 # Development
 
-The Deis project welcomes contributions from all developers. The high level process for development matches many other open source projects. See below for an outline.
+The Hephy project welcomes contributions from all developers. The high level process for development matches many other open source projects. See below for an outline.
 
 * Fork this repository
 * Make your changes
 * [Submit a pull request][prs] (PR) to this repository with your changes, and unit tests whenever possible
 	* If your PR fixes any [issues][issues], make sure you write `Fixes #1234` in your PR description (where `#1234` is the number of the issue you're closing)
-* The Deis core contributors will review your code. After each of them sign off on your code, they'll label your PR with `LGTM1` and `LGTM2` (respectively). Once that happens, a contributor will merge it
+* The Hephy core contributors will review your code. After each of them sign off on your code, they'll label your PR with `LGTM1` and `LGTM2` (respectively). Once that happens, a contributor will merge it
 
 # License
 

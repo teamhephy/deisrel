@@ -48,7 +48,7 @@ func main() {
 		cli.Command{
 			Name:      "release",
 			Action:    actions.ReleaseComponent(ghclient, os.Stdout),
-			Usage:     "create a new tagged release of a Deis component",
+			Usage:     "create a new tagged release of a Hephy component",
 			ArgsUsage: "<component> <new-tag>",
 			Flags: []cli.Flag{
 				cli.BoolTFlag{
